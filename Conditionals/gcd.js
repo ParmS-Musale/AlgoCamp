@@ -7,5 +7,5 @@ const greatestCommonDivisor = function(a,b){
     }
     return great;
 }
-
+ 
 console.log(greatestCommonDivisor(18,15));
