@@ -200,3 +200,161 @@ In TCP/IP, steps 2 and 3 are handled within the Application layer.
 - **OSI Model:** 7 layers, theoretical, used for understanding and troubleshooting.
 - **TCP/IP Model:** 4 layers, practical, basis for the internet.
 - **Both models:** Help standardize networking, but TCP/IP is used in real-world systems.
+
+
+## What is REST?
+
+**REST** (Representational State Transfer) is an architectural style for designing networked applications, especially web APIs. Introduced by Roy Fielding in 2000, REST APIs enable software systems to communicate over the internet using standard HTTP methods (GET, POST, PUT, DELETE), treating data as resources that clients can create, read, update, and delete.
+
+---
+
+### Why Use REST?
+
+- **Simplicity:** Uses standard HTTP methods, easy to learn and implement.
+- **Scalability:** Stateless requests allow for easy scaling.
+- **Flexibility & Independence:** Decouples client and server; each can evolve independently.
+- **Lightweight:** Commonly uses JSON, suitable for web and mobile.
+- **Integration:** Language and platform agnostic.
+
+---
+
+### REST Architectural Constraints
+
+REST APIs follow six key principles:
+
+1. **Stateless:** No client context stored on the server between requests.
+2. **Client-Server Separation:** Front end and back end evolve independently.
+3. **Uniform Interface:** Consistent resource access via URLs, HTTP methods, and status codes.
+4. **Resource-Based:** Everything is a resource (e.g., `/users`, `/orders`).
+5. **Cacheable:** Responses can be cached for performance.
+6. **Layered System:** Middleware and security can be added without changing the API.
+
+---
+
+### REST Best Practices
+
+- Use nouns and plural names for resources (e.g., `/users`).
+- Match HTTP methods to actions: GET (read), POST (create), PUT (update), DELETE (remove).
+- Prefer JSON for data exchange.
+- Provide clear error messages and standard status codes.
+- Keep endpoints consistent; version APIs (e.g., `/api/v1/`).
+- Secure APIs (OAuth 2.0, HTTPS).
+- Document endpoints and enable easy testing.
+
+---
+
+### How REST Works (Step-by-Step)
+
+1. **Client Request:** Sends HTTP request (e.g., `GET /api/users/5`).
+2. **Server Processing:** Authenticates, processes, and accesses the resource.
+3. **Server Response:** Returns status code (e.g., 200, 404) and data (usually JSON).
+4. **Client Handling:** Processes and displays the response.
+
+**Example:**
+
+- Request: `GET https://api.books.com/books/101`
+- Response:
+    ```json
+    {
+        "id": 101,
+        "title": "REST Basics",
+        "author": "A. N. Author"
+    }
+    ```
+
+---
+
+### Alternatives to REST
+
+| Technology   | Best For                  | Pros                              | Cons                                 |
+|--------------|---------------------------|------------------------------------|--------------------------------------|
+| REST         | General purpose, public APIs | Simple, scalable, widely adopted   | Over/under-fetching                  |
+| GraphQL      | Complex, data-heavy apps  | Flexible, precise data             | More complex, single endpoint        |
+| gRPC         | Internal microservices    | High performance, strongly typed   | Not human-readable, learning curve   |
+| WebSockets   | Real-time updates         | Bi-directional, low latency        | Not REST, complex state management   |
+| MQTT         | IoT, real-time messaging  | Lightweight, efficient             | Specialized, not for general APIs    |
+| Falcor       | Model-driven APIs         | Efficient data fetching            | Niche use case                       |
+| EDA          | Event-driven systems      | Asynchronous, scalable             | Requires message brokers             |
+
+---
+
+### Summary
+
+- REST is the most popular API style for web and mobile due to its simplicity and scalability.
+- Choose REST for most API needs; consider alternatives for real-time or complex data requirements.
+
+---
+
+## Common Ways to Send Custom Data in HTTP Requests
+
+### 1. Request Body (Most Flexible)
+- **Usage:** POST, PUT, PATCH methods allow clients to send structured data (JSON, XML, form-data) in the request body.
+- **Example (JSON):**
+    ```http
+    POST /api/user
+    Content-Type: application/json
+
+    {
+      "username": "customuser",
+      "favorite_color": "blue",
+      "preferences": {
+        "newsletter": true,
+        "notifications": "sms"
+      }
+    }
+    ```
+- **Notes:** Ideal for complex or nested data. The server parses and uses these fields.
+
+### 2. Query Parameters
+- **Usage:** Appended to URLs, typically for GET requests to filter or sort data.
+- **Example:**
+    ```
+    GET /api/products?category=shoes&sort=price_asc&discounted=true
+    ```
+- **Notes:** Best for simple key-value pairs; visible in the URL.
+
+### 3. Custom HTTP Headers
+- **Usage:** Used for metadata (auth tokens, tracking IDs, custom flags).
+- **Example:**
+    ```
+    GET /api/orders
+    X-Client-App: MobileAppV2
+    ```
+- **Notes:** Not suitable for large or structured data.
+
+### 4. Form Data (Key-Value Pairs or File Uploads)
+- **Usage:** Used for submitting forms or uploading files, often with `multipart/form-data`.
+- **Example:**
+    ```
+    POST /api/upload
+    Content-Type: multipart/form-data
+
+    --boundary
+    Content-Disposition: form-data; name="user_id"
+
+    12345
+    --boundary
+    Content-Disposition: form-data; name="profile_pic"; filename="profile.jpg"
+
+    ...image bytes...
+    --boundary--
+    ```
+- **Notes:** Allows mixing files and fields in one request.
+
+### 5. Cookies
+- **Usage:** Store persistent session data or user context sent automatically with requests.
+- **Notes:** Limited size; security considerations apply.
+
+---
+
+### Summary Table
+
+| Method         | Use For                          | Limitations                      |
+|----------------|----------------------------------|----------------------------------|
+| Request Body   | Flexible, structured, complex    | Not used in GET requests         |
+| Query Params   | Searching/filtering, simple      | Limited length, visible in URL   |
+| Headers        | Metadata, auth, IDs              | Not for complex data             |
+| Cookies        | Session/user context             | Size limits, security concerns   |
+
+**Summary:**  
+Clients typically use the request body for structured data (POST/PUT/PATCH), query parameters for filtering/searching, and headers for metadata. Choose the method based on the data type and HTTP method.
